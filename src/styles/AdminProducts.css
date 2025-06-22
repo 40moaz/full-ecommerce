@@ -1,0 +1,139 @@
+.admin-products-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 32px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.headerp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.headerp h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #222;
+}
+
+.add-btn {
+    background: #0078d4;
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.add-btn:hover {
+    background: #005fa3;
+}
+
+.search-bar {
+    margin-bottom: 24px;
+}
+.search-bar input {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+.search-bar input:focus {
+    border-color: #0078d4;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.product-card {
+    background: #f9fafb;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s;
+}
+.product-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+.product-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 14px;
+}
+
+.product-info {
+    text-align: center;
+    margin-bottom: 14px;
+}
+.product-info h2 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 6px 0;
+}
+.product-info .price {
+    color: #0078d4;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.product-info .stock {
+    color: #555;
+    font-size: 0.96rem;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+    border: none;
+    padding: 7px 16px;
+    border-radius: 5px;
+    font-size: 0.98rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.edit-btn {
+    background: #e3eefd;
+    color: #0078d4;
+}
+.edit-btn:hover {
+    background: #c7e0fa;
+}
+
+.delete-btn {
+    background: #fde3e3;
+    color: #d32f2f;
+}
+.delete-btn:hover {
+    background: #f8bdbd;
+}
+
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #888;
+    font-size: 1.1rem;
+    padding: 40px 0;
+}

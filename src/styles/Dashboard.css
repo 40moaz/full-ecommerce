@@ -1,0 +1,87 @@
+/* Dashboard.css */
+
+/* General dashboard layout */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f7f8fa;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Header styling */
+.dashboard-header {
+    background: #232f3e;
+    color: #fff;
+    padding: 1.5rem 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Sidebar styling */
+.dashboard-sidebar {
+    background: #fff;
+    border-right: 1px solid #e5e7eb;
+    width: 220px;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.dashboard-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-sidebar li {
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-sidebar a {
+    color: #232f3e;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+
+.dashboard-sidebar a:hover,
+.dashboard-sidebar a.active {
+    color: #0070f3;
+    font-weight: 500;
+}
+
+/* Main content area */
+.dashboard-main {
+    margin-left: 220px;
+    padding: 2rem;
+    flex: 1;
+}
+
+/* Card styles */
+.dashboard-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .dashboard-sidebar {
+        width: 60px;
+        padding: 1rem 0.5rem;
+    }
+    .dashboard-main {
+        margin-left: 60px;
+        padding: 1rem;
+    }
+    .dashboard-header {
+        font-size: 1.2rem;
+        padding: 1rem;
+    }
+}

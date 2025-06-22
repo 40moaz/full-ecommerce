@@ -1,0 +1,114 @@
+/* Show */
+.show {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .show {
+        flex-direction: row;
+        gap: 0;
+    }
+
+    .show .left, .show .right {
+        flex: 1;
+        max-width: 50%;
+    }
+
+    .show .left {
+        border-right: 1px solid #ccc;
+        padding-right: 20px;
+    }
+
+    .show .right {
+        background-color: #f5f5f5;
+        padding-left: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 663px) {
+    .show .right {
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 530px) {
+    .show .left .xiaomi,
+    .show .left .samsung {
+        flex-direction: column;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+
+    .show .left .xiaomi img,
+    .show .left .samsung img {
+        margin-left: 0 !important;
+    }
+}
+
+.show .left .xiaomi,
+.show .left .samsung {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.show .left .xiaomi .content,
+.show .left .samsung .content {
+    flex: 1;
+    text-align: center;
+}
+
+.show .left .samsung {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #353535;
+    color: #fff;
+    padding: 20px 0;
+}
+
+.show .left .samsung p {
+    color: #aaa;
+}
+
+.show .right .content {
+    max-width: 400px;
+    text-align: left;
+}
+
+.show .right .content h2 {
+    font-size: 42px;
+    font-weight: 300;
+}
+
+.show .right .content span {
+    font-weight: bold;
+}
+
+.show .right .content p {
+    font-size: 15px;
+    color: #666;
+    margin: 15px 0;
+}
+
+.show .right .content .btn {
+    padding: 10px 25px;
+    font-size: 15px;
+    border-radius: 30px;
+}
+
+.show .right .img img {
+    max-width: 100%;
+}
