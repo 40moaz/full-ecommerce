@@ -5,6 +5,7 @@ import instance from "../axiosInstance/Instance.jsx";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 const classicLabelStyle = {
   color: "#2d2d2d",
   fontWeight: 600,
@@ -67,10 +68,12 @@ const Profile = ({ user }) => {
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarHover, setAvatarHover] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const navigate = useNavigate();
   const onLogout = () => {
     Cookies.remove("token");
-    window.location.href = "/login";
+    localStorage.removeItem("user");
+    navigate("/");
+    window.location.reload(); // لضمان تحديث حالة الـ user
   };
 
   const uploadImageToCloudinary = async (file) => {
@@ -112,7 +115,8 @@ const Profile = ({ user }) => {
     try {
       const response = await instance.delete(`/api/auth/${user._id}`);
       Swal.fire("Deleted!", "Your account has been deleted.", "success");
-      window.location.href = "/register";
+      Cookies.remove("token");
+      window.location.href = "/";
     } catch (error) {
       Swal.fire("Error!", "Failed to delete your account.", error);
     }
@@ -120,7 +124,12 @@ const Profile = ({ user }) => {
 
   const handleEditSave = async () => {
     setErrorMessage("");
-    if (!editForm.firstName || !editForm.lastName || !editForm.email || !editForm.password) {
+    if (
+      !editForm.firstName ||
+      !editForm.lastName ||
+      !editForm.email ||
+      !editForm.password
+    ) {
       setErrorMessage("Please fill all fields including current password.");
       return;
     }
@@ -189,65 +198,78 @@ const Profile = ({ user }) => {
       <div style={classicStyles.header}>
         {/* Avatar display */}
         <div
-          style={{ position: "relative", width: 110, height: 110, margin: "0 auto 16px", cursor: "pointer" }}
+          style={{
+            position: "relative",
+            width: 110,
+            height: 110,
+            margin: "0 auto 16px",
+            cursor: "pointer",
+          }}
           onMouseEnter={() => setAvatarHover(true)}
           onMouseLeave={() => setAvatarHover(false)}
           onClick={() => setShowAvatarModal(true)}
         >
-  {user.avatar ? (
-    <Image
-      src={user.avatar}
-      roundedCircle
-      width={110}
-      height={110}
-      alt="User Avatar"
-      style={{ objectFit: "cover", width: "100%", height: "100%", border: "3px solid #bfa46d" }}
-    />
-  ) : (
-    <div
-      style={{
-        width: 110,
-        height: 110,
-        borderRadius: "50%",
-        background: "#bfa46d",
-        color: "#fff",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 48,
-        fontWeight: "bold",
-        border: "3px solid #bfa46d",
-        fontFamily: "'Georgia', serif",
-        userSelect: "none"
-      }}
-    >
-      {user.firstName ? user.firstName[0].toUpperCase() : "U"}
-    </div>
-  )}
-  {avatarHover && (
-    <span
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0,0,0,0.4)",
-        color: "#fff",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontWeight: "bold",
-        fontSize: 20,
-        borderRadius: "50%",
-        pointerEvents: "none"
-      }}
-    >
-      Edit
-    </span>
-  )}
+          {user.avatar ? (
+            <Image
+              src={user.avatar}
+              roundedCircle
+              width={110}
+              height={110}
+              alt="User Avatar"
+              style={{
+                objectFit: "cover",
+                width: "100%",
+                height: "100%",
+                border: "3px solid #bfa46d",
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: 110,
+                height: 110,
+                borderRadius: "50%",
+                background: "#bfa46d",
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 48,
+                fontWeight: "bold",
+                border: "3px solid #bfa46d",
+                fontFamily: "'Georgia', serif",
+                userSelect: "none",
+              }}
+            >
+              {user.firstName ? user.firstName[0].toUpperCase() : "U"}
+            </div>
+          )}
+          {avatarHover && (
+            <span
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "rgba(0,0,0,0.4)",
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: "bold",
+                fontSize: 20,
+                borderRadius: "50%",
+                pointerEvents: "none",
+              }}
+            >
+              Edit
+            </span>
+          )}
         </div>
-        <h2 style={{ color: "#bfa46d", fontFamily: "'Georgia', serif" }}>My Profile</h2>
+        <h2 style={{ color: "#bfa46d", fontFamily: "'Georgia', serif" }}>
+          My Profile
+        </h2>
       </div>
 
       {/* Error display */}
@@ -273,10 +295,18 @@ const Profile = ({ user }) => {
 
       {/* Actions */}
       <div style={classicStyles.buttonGroup}>
-        <Button variant="outline-primary" onClick={() => setShowEdit(true)}>Edit Profile</Button>
-        <Button variant="outline-warning" onClick={() => setShowPassword(true)}>Change Password</Button>
-        <Button variant="outline-danger" onClick={handleDelete}>Delete Account</Button>
-        <Button variant="outline-secondary" onClick={onLogout}>Logout</Button>
+        <Button variant="outline-primary" onClick={() => setShowEdit(true)}>
+          Edit Profile
+        </Button>
+        <Button variant="outline-warning" onClick={() => setShowPassword(true)}>
+          Change Password
+        </Button>
+        <Button variant="outline-danger" onClick={handleDelete}>
+          Delete Account
+        </Button>
+        <Button variant="outline-secondary" onClick={onLogout}>
+          Logout
+        </Button>
       </div>
       {/* Edit Profile Modal */}
       <Modal show={showEdit} onHide={() => setShowEdit(false)} centered>
@@ -292,42 +322,42 @@ const Profile = ({ user }) => {
             <Form.Group className="mb-3">
               <Form.Label style={classicLabelStyle}>First Name</Form.Label>
               <Form.Control
-              placeholder={user.firstName}
-              value={editForm.firstName}
-              onChange={(e) =>
-                setEditForm({ ...editForm, firstName: e.target.value })
-              }
+                placeholder={user.firstName}
+                value={editForm.firstName}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, firstName: e.target.value })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label style={classicLabelStyle}>Last Name</Form.Label>
               <Form.Control
-              placeholder={user.lastName}
-              value={editForm.lastName}
-              onChange={(e) =>
-                setEditForm({ ...editForm, lastName: e.target.value })
-              }
+                placeholder={user.lastName}
+                value={editForm.lastName}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, lastName: e.target.value })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label style={classicLabelStyle}>Email</Form.Label>
               <Form.Control
-              placeholder={user.email}
-              type="email"
-              value={editForm.email}
-              onChange={(e) =>
-                setEditForm({ ...editForm, email: e.target.value })
-              }
+                placeholder={user.email}
+                type="email"
+                value={editForm.email}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, email: e.target.value })
+                }
               />
             </Form.Group>
             <Form.Group>
               <Form.Label style={classicLabelStyle}>Phone</Form.Label>
               <Form.Control
-              placeholder={user.phone}
-              value={editForm.phone || ""}
-              onChange={(e) =>
-                setEditForm({ ...editForm, phone: e.target.value })
-              }
+                placeholder={user.phone}
+                value={editForm.phone || ""}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, phone: e.target.value })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3">

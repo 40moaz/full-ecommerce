@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, NavLink } from "react-router-dom";
 import { Container, Navbar, Nav, Form, FormControl } from "react-bootstrap";
 import { BagHeart, Cart } from "react-bootstrap-icons";
-import Cookies from 'js-cookie';
-import { Link, NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const Header = ({ user }) => {
   const [query, setQuery] = useState("");
@@ -15,6 +14,15 @@ export const Header = ({ user }) => {
     navigate(`/search?q=${encodeURIComponent(query.trim())}`);
   };
 
+  const handleLogout = () => {
+    Cookies.remove("token");
+    localStorage.removeItem("user");
+    navigate("/");
+    window.location.reload(); // لضمان تحديث حالة الـ user
+  };
+
+  const isLoggedIn = user && user._id;
+
   return (
     <header>
       <div className="navbar">
@@ -25,7 +33,10 @@ export const Header = ({ user }) => {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav">
-              <Form onSubmit={handleSearch} className="d-flex mx-auto mt-3 my-lg-0 w-50">
+              <Form
+                onSubmit={handleSearch}
+                className="d-flex mx-auto mt-3 my-lg-0 w-50"
+              >
                 <FormControl
                   type="search"
                   placeholder="Search"
@@ -49,12 +60,20 @@ export const Header = ({ user }) => {
                   <NavLink to="/cart">
                     <Cart size={25} />
                   </NavLink>
-                  {Cookies.get('token') ? (
-                    <NavLink to="/profile">{user.firstName}</NavLink>
+                  {isLoggedIn ? (
+                    <>
+                      <NavLink to="/profile">{user?.firstName}</NavLink>
+                      <button
+                        className="btn btn-link text-danger p-0"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </>
                   ) : (
                     <NavLink to="/login">Login</NavLink>
                   )}
-                  {user.role === 'admin' && (
+                  {user?.role === "admin" && (
                     <NavLink to="/dashboard">Dashboard</NavLink>
                   )}
                 </div>

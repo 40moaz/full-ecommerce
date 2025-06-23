@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Instance from "../axiosInstance/Instance";
-
+import Cookies from "js-cookie";
 // Example country codes (expand as needed)
 const countryCodes = [
   { code: "+1", name: "United States" },
@@ -13,12 +13,12 @@ const countryCodes = [
 ];
 
 const validateName = (name) => /^[A-Za-z]{2,}$/.test(name);
-const validateEmail = (email) =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 const validatePassword = (password) =>
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-const validatePhone = (phone) =>
-  /^[0-9]{7,15}$/.test(phone);
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+    password
+  );
+const validatePhone = (phone) => /^[0-9]{7,15}$/.test(phone);
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -34,10 +34,12 @@ const Register = () => {
     e.preventDefault();
     const newErrors = {};
     if (!validateName(firstName)) {
-      newErrors.firstName = "First name must be at least 2 letters and contain only letters.";
+      newErrors.firstName =
+        "First name must be at least 2 letters and contain only letters.";
     }
     if (!validateName(lastName)) {
-      newErrors.lastName = "Last name must be at least 2 letters and contain only letters.";
+      newErrors.lastName =
+        "Last name must be at least 2 letters and contain only letters.";
     }
     if (!validateEmail(email)) {
       newErrors.email = "Invalid email address.";
@@ -60,8 +62,10 @@ const Register = () => {
         phone: countryCode + phone,
         password,
       });
-      console.log("Registration successful:", response.data);
-      navigate("/login");
+      if (response.data.user) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+      }
+      window.location.href = "/";
     } catch (error) {
       setErrors({ api: error.response?.data?.message || error.message });
     }
@@ -69,11 +73,16 @@ const Register = () => {
 
   return (
     <div className="register-page d-flex justify-content-center align-items-center mt-5 mb-5 bg-light">
-      <div className="card p-4 border shadow-lg" style={{ width: '100%', maxWidth: '400px', borderRadius: "1rem" }}>
+      <div
+        className="card p-4 border shadow-lg"
+        style={{ width: "100%", maxWidth: "400px", borderRadius: "1rem" }}
+      >
         <h2 className="text-center mb-4 text-primary">Register</h2>
         <form onSubmit={handleRegister} style={{ margin: "0" }}>
           <div className="mb-3">
-            <label htmlFor="firstName" className="form-label fw-semibold">First Name</label>
+            <label htmlFor="firstName" className="form-label fw-semibold">
+              First Name
+            </label>
             <input
               type="text"
               id="firstName"
@@ -82,10 +91,14 @@ const Register = () => {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
-            {errors.firstName && <div className="invalid-feedback">{errors.firstName}</div>}
+            {errors.firstName && (
+              <div className="invalid-feedback">{errors.firstName}</div>
+            )}
           </div>
           <div className="mb-3">
-            <label htmlFor="lastName" className="form-label fw-semibold">Last Name</label>
+            <label htmlFor="lastName" className="form-label fw-semibold">
+              Last Name
+            </label>
             <input
               type="text"
               id="lastName"
@@ -94,10 +107,14 @@ const Register = () => {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
-            {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
+            {errors.lastName && (
+              <div className="invalid-feedback">{errors.lastName}</div>
+            )}
           </div>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label fw-semibold">Email</label>
+            <label htmlFor="email" className="form-label fw-semibold">
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -106,7 +123,9 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+            {errors.email && (
+              <div className="invalid-feedback">{errors.email}</div>
+            )}
           </div>
           <div className="mb-3">
             <label className="form-label fw-semibold">Phone</label>
@@ -131,11 +150,15 @@ const Register = () => {
                 onChange={(e) => setPhone(e.target.value.replace(/\D/, ""))}
                 maxLength={15}
               />
-              {errors.phone && <div className="invalid-feedback d-block">{errors.phone}</div>}
+              {errors.phone && (
+                <div className="invalid-feedback d-block">{errors.phone}</div>
+              )}
             </div>
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="form-label fw-semibold">Password</label>
+            <label htmlFor="password" className="form-label fw-semibold">
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -144,7 +167,9 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+            {errors.password && (
+              <div className="invalid-feedback">{errors.password}</div>
+            )}
           </div>
           {errors.api && (
             <div className="alert alert-danger py-1">{errors.api}</div>
@@ -154,7 +179,12 @@ const Register = () => {
           </button>
         </form>
         <div className="text-center mt-3">
-          <small className="text-muted">Do you have an account? <Link to="/login" className="text-primary">login</Link></small>
+          <small className="text-muted">
+            Do you have an account?{" "}
+            <Link to="/login" className="text-primary">
+              login
+            </Link>
+          </small>
         </div>
       </div>
     </div>

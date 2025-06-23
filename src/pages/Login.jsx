@@ -10,11 +10,11 @@ const Login = () => {
   const [err, setErr] = useState("");
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log(email, password);
     try {
       if (!email || !password) {
         throw new Error("Email and password are required");
       }
-console.log(email, password);
 
       const response = await Instance.post("/api/auth/login", {
         email,
@@ -73,11 +73,15 @@ console.log(email, password);
           </button>
         </form>
         <div className="text-center mt-3">
-          {err === "" ? "" :
-          <p className="alert alert-danger py-1">
-            {err == "Request failed with status code 400" ? "Invalid credentials": err}
-          </p>
-          }
+          {err === "" ? (
+            ""
+          ) : (
+            <p className="alert alert-danger py-1">
+              {err == "Request failed with status code 400"
+                ? "Invalid credentials"
+                : err}
+            </p>
+          )}
           <small className="text-muted">
             Don't have an account?{" "}
             <Link to="/register" className="text-primary">

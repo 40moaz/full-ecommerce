@@ -33,27 +33,40 @@ import ChatWidget from "./components/ChatWidget";
 function App() {
   const [user, setUser] = useState({});
   const token = Cookies.get("token") || "";
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        if (token) {
-          const response = await Instance.get("/api/auth/me", {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // Assuming token is stored in localStorage
-            },
-          });
-          const userData = response.data;
-          setUser(userData);
-          console.log("User data fetched successfully:", userData);
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      // 1. جرب تجيب اليوزر من localStorage الأول
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+        return;
       }
-    };
 
-    fetchUser();
-  }, []);
+      // 2. لو مفيش يوزر لكن فيه توكن → هاته من السيرفر
+      if (token) {
+        const response = await Instance.get("/api/auth/me", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const userData = response.data;
+        setUser(userData);
+
+        // اختياري: خزّنه كمان في localStorage بعد ما يجي من التوكن
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        console.log("User data fetched successfully from token:", userData);
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+
+  fetchUser();
+}, []);
+
   console.log(user);
 
   const userId = user._id;
