@@ -26,7 +26,7 @@ export const Header = ({ user }) => {
   return (
     <header>
       <div className="navbar">
-        <Navbar expand="lg" className="py-2">
+        <Navbar expand="lg"  className="py-2">
           <Container>
             <Navbar.Brand href="/" className="d-flex align-items-center">
               <span>cyber</span>
